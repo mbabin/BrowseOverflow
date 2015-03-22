@@ -10,29 +10,29 @@
 	<string>BrowseOverflow</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>5B38F333-4EE1-44C0-9179-1B28981ABE30</key>
-		<string>ssh://github.com/iamleeg/BrowseOverflow.git</string>
+		<key>61D4D9A926E395FC3194AD1BDD818A1CD74DDBC2</key>
+		<string>https://github.com/mbabin/BrowseOverflow.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BrowseOverflow.xcodeproj/project.xcworkspace</string>
+	<string>BrowseOverflow.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>5B38F333-4EE1-44C0-9179-1B28981ABE30</key>
+		<key>61D4D9A926E395FC3194AD1BDD818A1CD74DDBC2</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/iamleeg/BrowseOverflow.git</string>
+	<string>https://github.com/mbabin/BrowseOverflow.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>5B38F333-4EE1-44C0-9179-1B28981ABE30</string>
+	<string>61D4D9A926E395FC3194AD1BDD818A1CD74DDBC2</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5B38F333-4EE1-44C0-9179-1B28981ABE30</string>
+			<string>61D4D9A926E395FC3194AD1BDD818A1CD74DDBC2</string>
 			<key>IDESourceControlWCCName</key>
 			<string>BrowseOverflow</string>
 		</dict>

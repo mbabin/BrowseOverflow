@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		368AFA2C1ABF63A9000AE30C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 368AFA2B1ABF63A8000AE30C /* Default-568h@2x.png */; };
 		9803B9D3134328FC00FEF72D /* QuestionBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9803B9D2134328FC00FEF72D /* QuestionBuilder.m */; };
 		9803B9D4134328FC00FEF72D /* QuestionBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9803B9D2134328FC00FEF72D /* QuestionBuilder.m */; };
 		9803B9D7134330E000FEF72D /* FakeQuestionBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9803B9D6134330E000FEF72D /* FakeQuestionBuilder.m */; };
@@ -114,6 +115,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		368AFA2B1ABF63A8000AE30C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		9803B9D1134328FC00FEF72D /* QuestionBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuestionBuilder.h; sourceTree = "<group>"; };
 		9803B9D2134328FC00FEF72D /* QuestionBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuestionBuilder.m; sourceTree = "<group>"; };
 		9803B9D5134330E000FEF72D /* FakeQuestionBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeQuestionBuilder.h; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 				98A548D8130D3ABD003C4F0F /* InfoPlist.strings */,
 				98A548DB130D3ABD003C4F0F /* BrowseOverflow-Prefix.pch */,
 				98A548DC130D3ABD003C4F0F /* main.m */,
+				368AFA2B1ABF63A8000AE30C /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -511,7 +514,7 @@
 		98A548C2130D3ABB003C4F0F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = "Fuzzy Aliens Ltd.";
 			};
 			buildConfigurationList = 98A548C5130D3ABB003C4F0F /* Build configuration list for PBXProject "BrowseOverflow" */;
@@ -542,6 +545,7 @@
 				98A548E9130D3ABE003C4F0F /* RootViewController.xib in Resources */,
 				981F716913DD87A300061943 /* BrowseOverflowViewController.xib in Resources */,
 				9854500E13FABE6400665C7A /* QuestionSummaryCell.xib in Resources */,
+				368AFA2C1ABF63A9000AE30C /* Default-568h@2x.png in Resources */,
 				984C65DC140E33770009AB45 /* QuestionDetailCell.xib in Resources */,
 				98BE817C1430E16C00CAC4E9 /* AnswerCell.xib in Resources */,
 			);
@@ -717,7 +721,6 @@
 		98A54900130D3ABF003C4F0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -726,7 +729,8 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -734,14 +738,13 @@
 		98A54901130D3ABF003C4F0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};

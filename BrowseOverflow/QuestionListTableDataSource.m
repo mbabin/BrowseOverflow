@@ -34,7 +34,7 @@
             [[NSBundle bundleForClass: [self class]] loadNibNamed: @"QuestionSummaryCell" owner: self options: nil];
         }
         summaryCell.titleLabel.text = question.title;
-        summaryCell.scoreLabel.text = [NSString stringWithFormat: @"%d", question.score];
+        summaryCell.scoreLabel.text = [NSString stringWithFormat: @"%ld", (long)question.score];
         summaryCell.nameLabel.text = question.asker.name;
         
         NSData *avatarData = [avatarStore dataForURL: question.asker.avatarURL];

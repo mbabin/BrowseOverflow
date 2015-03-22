@@ -48,7 +48,7 @@
 
 - (void)downloadInformationForQuestionWithID:(NSInteger)identifier {
     [self fetchContentAtURL: [NSURL URLWithString:
-                              [NSString stringWithFormat: @"http://api.stackoverflow.com/1.1/questions/%d?body=true", identifier]]
+                              [NSString stringWithFormat: @"http://api.stackoverflow.com/1.1/questions/%ld?body=true", (long)identifier]]
                errorHandler: ^(NSError *error) {
                    [delegate fetchingQuestionBodyFailedWithError: error];
                }
@@ -59,7 +59,7 @@
 
 - (void)downloadAnswersToQuestionWithID:(NSInteger)identifier {
     [self fetchContentAtURL: [NSURL URLWithString:
-                              [NSString stringWithFormat: @"http://api.stackoverflow.com/1.1/questions/%d/answers?body=true", identifier]]
+                              [NSString stringWithFormat: @"http://api.stackoverflow.com/1.1/questions/%ld/answers?body=true", (long)identifier]]
                errorHandler: ^(NSError *error) {
                    [delegate fetchingAnswersFailedWithError: error];
                }
