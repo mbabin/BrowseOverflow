@@ -13,37 +13,31 @@
 #import "Person.h"
 
 static NSString *realAnswerJSON = @"{"
-@"\"total\": 1,"
-@"\"page\": 1,"
-@"\"pagesize\": 30,"
-@"\"answers\": ["
+@"\"items\": ["
 @"{"
 @"\"answer_id\": 3231900,"
-@"\"accepted\": true,"
-@"\"answer_comments_url\": \"/answers/3231900/comments\","
+@"\"is_accepted\": true,"
 @"\"question_id\": 2817980,"
 @"\"owner\": {"
 @"\"user_id\": 266380,"
 @"\"user_type\": \"registered\","
 @"\"display_name\": \"dmaclach\","
 @"\"reputation\": 151,"
-@"\"email_hash\": \"d96ae876eac0075727243a10fab823b3\""
+@"\"profile_image\": \"http://www.gravatar.com/avatar/d96ae876eac0075727243a10fab823b3\""
 @"},"
 @"\"creation_date\": 1278965736,"
 @"\"last_activity_date\": 1278965736,"
-@"\"up_vote_count\": 1,"
-@"\"down_vote_count\": 0,"
-@"\"view_count\": 0,"
 @"\"score\": 1,"
-@"\"community_owned\": false,"
-@"\"title\": \"Why does Keychain Services return the wrong keychain content?\","
 @"\"body\": \"<p>Turns out that using the kSecMatchItemList doesn't appear to work at all. </p>\""
 @"}"
-@"]"
+@"],"
+@"\"has_more\": false,"
+@"\"quota_max\": 10000,"
+@"\"quota_remaining\": 9959"
 @"}";
 
 static NSString *stringIsNotJSON = @"Not JSON";
-static NSString *noAnswersJSONString = @"{ \"noanswers\": true }";
+static NSString *noAnswersJSONString = @"{ \"noitems\": true }";
 
 @implementation AnswerBuilderTests
 

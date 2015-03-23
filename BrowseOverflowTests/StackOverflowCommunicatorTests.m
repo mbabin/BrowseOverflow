@@ -29,17 +29,17 @@
 
 - (void)testSearchingForQuestionsOnTopicCallsTopicAPI {
     [communicator searchForQuestionsWithTag: @"ios"];
-    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"http://api.stackoverflow.com/1.1/search?tagged=ios&pagesize=20", @"Use the search API to find questions with a particular tag");
+    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"https://api.stackexchange.com/2.2/search?pagesize=20&order=desc&sort=activity&tagged=ios&site=stackoverflow", @"Use the search API to find questions with a particular tag");
 }
 
 - (void)testFillingInQuestionBodyCallsQuestionAPI {
     [communicator downloadInformationForQuestionWithID: 12345];
-    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"http://api.stackoverflow.com/1.1/questions/12345?body=true", @"Use the question API to get the body for a question");
+    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"https://api.stackexchange.com/2.2/questions/12345?order=desc&sort=activity&site=stackoverflow&filter=withbody", @"Use the question API to get the body for a question");
 }
 
 - (void)testFetchingAnswersToQuestionCallsQuestionAPI {
     [communicator downloadAnswersToQuestionWithID: 12345];
-    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"http://api.stackoverflow.com/1.1/questions/12345/answers?body=true", @"Use the question API to get answers on a given question");
+    XCTAssertEqualObjects([[communicator URLToFetch] absoluteString], @"https://api.stackexchange.com/2.2/questions/12345/answers?order=desc&sort=activity&site=stackoverflow&filter=withbody", @"Use the question API to get answers on a given question");
 }
 
 - (void)testSearchingForQuestionsCreatesURLConnection {

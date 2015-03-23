@@ -17,7 +17,9 @@
 - (id)initWithName:(NSString *)aName avatarLocation:(NSString *)location {
     if ((self = [super init])) {
         name = [aName copy];
-        avatarURL = [[NSURL alloc] initWithString: location];
+		if (location) {
+			avatarURL = [[NSURL alloc] initWithString: location];
+		}
     }
     return self;
 }

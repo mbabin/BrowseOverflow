@@ -29,7 +29,7 @@
         }
         return nil;
     }
-    NSArray *questions = [parsedObject objectForKey: @"questions"];
+    NSArray *questions = [parsedObject objectForKey: @"items"];
     if (questions == nil) {
         if (error != NULL) {
             *error = [NSError errorWithDomain:QuestionBuilderErrorDomain code: QuestionBuilderMissingDataError userInfo:nil];
@@ -58,7 +58,7 @@
     if (![parsedObject isKindOfClass: [NSDictionary class]]) {
         return;
     }
-    NSString *questionBody = [[[parsedObject objectForKey: @"questions"] lastObject] objectForKey: @"body"];
+    NSString *questionBody = [[[parsedObject objectForKey: @"items"] lastObject] objectForKey: @"body"];
     if (questionBody) {
         question.body = questionBody;
     }

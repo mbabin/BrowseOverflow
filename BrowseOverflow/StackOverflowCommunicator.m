@@ -36,8 +36,8 @@
 }
 
 - (void)searchForQuestionsWithTag:(NSString *)tag {
-    [self fetchContentAtURL: [NSURL URLWithString:
-                              [NSString stringWithFormat: @"http://api.stackoverflow.com/1.1/search?tagged=%@&pagesize=20", tag]]
+	[self fetchContentAtURL: [NSURL URLWithString:
+							  [NSString stringWithFormat: @"https://api.stackexchange.com/2.2/search?pagesize=20&order=desc&sort=activity&tagged=%@&site=stackoverflow", tag]]
                errorHandler: ^(NSError *error) {
                    [delegate searchingForQuestionsFailedWithError: error];
                }
@@ -48,7 +48,7 @@
 
 - (void)downloadInformationForQuestionWithID:(NSInteger)identifier {
     [self fetchContentAtURL: [NSURL URLWithString:
-                              [NSString stringWithFormat: @"http://api.stackoverflow.com/1.1/questions/%ld?body=true", (long)identifier]]
+							  [NSString stringWithFormat:@"https://api.stackexchange.com/2.2/questions/%ld?order=desc&sort=activity&site=stackoverflow&filter=withbody", (long)identifier]]
                errorHandler: ^(NSError *error) {
                    [delegate fetchingQuestionBodyFailedWithError: error];
                }
@@ -59,7 +59,7 @@
 
 - (void)downloadAnswersToQuestionWithID:(NSInteger)identifier {
     [self fetchContentAtURL: [NSURL URLWithString:
-                              [NSString stringWithFormat: @"http://api.stackoverflow.com/1.1/questions/%ld/answers?body=true", (long)identifier]]
+							  [NSString stringWithFormat:@"https://api.stackexchange.com/2.2/questions/%ld/answers?order=desc&sort=activity&site=stackoverflow&filter=withbody", (long)identifier]]
                errorHandler: ^(NSError *error) {
                    [delegate fetchingAnswersFailedWithError: error];
                }

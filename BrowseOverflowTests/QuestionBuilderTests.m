@@ -12,10 +12,7 @@
 #import "Person.h"
 
 static NSString *questionJSON = @"{"
-@"\"total\": 1,"
-@"\"page\": 1,"
-@"\"pagesize\": 30,"
-@"\"questions\": ["
+@"\"items\": ["
 @"{"
 @"\"tags\": ["
 @"\"iphone\","
@@ -24,34 +21,30 @@ static NSString *questionJSON = @"{"
 @"],"
 @"\"answer_count\": 1,"
 @"\"accepted_answer_id\": 3231900,"
-@"\"favorite_count\": 1,"
-@"\"question_timeline_url\": \"/questions/2817980/timeline\","
-@"\"question_comments_url\": \"/questions/2817980/comments\","
-@"\"question_answers_url\": \"/questions/2817980/answers\","
 @"\"question_id\": 2817980,"
 @"\"owner\": {"
 @"\"user_id\": 23743,"
 @"\"user_type\": \"registered\","
 @"\"display_name\": \"Graham Lee\","
 @"\"reputation\": 13459,"
-@"\"email_hash\": \"563290c0c1b776a315b36e863b388a0c\""
+@"\"profile_image\": \"http://www.gravatar.com/avatar/563290c0c1b776a315b36e863b388a0c\","
 @"},"
 @"\"creation_date\": 1273660706,"
 @"\"last_activity_date\": 1278965736,"
-@"\"up_vote_count\": 2,"
-@"\"down_vote_count\": 0,"
 @"\"view_count\": 465,"
 @"\"score\": 2,"
-@"\"community_owned\": false,"
 @"\"title\": \"Why does Keychain Services return the wrong keychain content?\","
 @"\"body\": \"<p>I've been trying to use persistent keychain references.</p>\""
 @"}"
-@"]"
+@"],"
+@"\"has_more\":true,"
+@"\"quota_max\":300,"
+@"\"quota_remaining\":298"
 @"}";
 
 static NSString *stringIsNotJSON = @"Not JSON";
-static NSString *noQuestionsJSONString = @"{ \"noquestions\": true }";
-static NSString *emptyQuestionsArray = @"{ \"questions\": [] }";
+static NSString *noQuestionsJSONString = @"{ \"noitems\": true }";
+static NSString *emptyQuestionsArray = @"{ \"items\": [] }";
 
 @implementation QuestionBuilderTests
 
@@ -106,11 +99,11 @@ static NSString *emptyQuestionsArray = @"{ \"questions\": [] }";
     XCTAssertEqual(question.score, 2, @"Score should match the data");
     Person *asker = question.asker;
     XCTAssertEqualObjects(asker.name, @"Graham Lee", @"Looks like I should have asked this question");
-    XCTAssertEqualObjects([asker.avatarURL absoluteString], @"http://www.gravatar.com/avatar/563290c0c1b776a315b36e863b388a0c", @"The avatar URL should be based on the supplied email hash");
+    XCTAssertEqualObjects([asker.avatarURL absoluteString], @"http://www.gravatar.com/avatar/563290c0c1b776a315b36e863b388a0c", @"The avatar URL should match the provided data");
 }
 
 - (void)testQuestionCreatedFromEmptyObjectIsStillValidObject {
-    NSString *emptyQuestion = @"{ \"questions\": [ {} ] }";
+    NSString *emptyQuestion = @"{ \"items\": [ {} ] }";
     NSArray *questions = [questionBuilder questionsFromJSON: emptyQuestion error: NULL];
     XCTAssertEqual([questions count], (NSUInteger)1, @"QuestionBuilder must handle partial input");
 }

@@ -13,7 +13,7 @@
 
 + (Person *) personFromDictionary: (NSDictionary *) ownerValues  {
     NSString *name = [ownerValues objectForKey: @"display_name"];
-    NSString *avatarURL = [NSString stringWithFormat: @"http://www.gravatar.com/avatar/%@", [ownerValues objectForKey: @"email_hash"]];
+    NSString *avatarURL = [ownerValues objectForKey: @"profile_image"];
     Person *owner = [[Person alloc] initWithName: name avatarLocation: avatarURL];
     return owner;
 }
