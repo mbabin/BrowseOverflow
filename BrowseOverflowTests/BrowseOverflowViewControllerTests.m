@@ -208,7 +208,8 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
 }
 
 - (void)testSelectingTopicPushesNewViewController {
-    [viewController userDidSelectTopicNotification: nil];
+    [viewController userDidSelectTopicNotification: [NSNotification notificationWithName:TopicTableDidSelectTopicNotification object:dataSource]];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
     UIViewController *currentTopVC = navController.topViewController;
     XCTAssertFalse([currentTopVC isEqual: viewController], @"New view controller should be pushed onto the stack");
     XCTAssertTrue([currentTopVC isKindOfClass: [BrowseOverflowViewController class]], @"New view controller should be a BrowseOverflowViewController");
@@ -216,8 +217,9 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
 
 - (void)testNewViewControllerHasAQuestionListDataSourceForTheSelectedTopic {
     Topic *iPhoneTopic = [[Topic alloc] initWithName: @"iPhone" tag: @"iphone"];
-    NSNotification *iPhoneTopicSelectedNotification = [NSNotification notificationWithName: TopicTableDidSelectTopicNotification object: iPhoneTopic];
+	NSNotification *iPhoneTopicSelectedNotification = [NSNotification notificationWithName: TopicTableDidSelectTopicNotification object: dataSource userInfo: @{TopicTableDidSelectTopicNotificationKey : iPhoneTopic}];
     [viewController userDidSelectTopicNotification: iPhoneTopicSelectedNotification];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
     BrowseOverflowViewController *nextViewController = (BrowseOverflowViewController *)navController.topViewController;
     XCTAssertTrue([nextViewController.dataSource isKindOfClass: [QuestionListTableDataSource class]], @"Selecting a topic should push a list of questions");
     XCTAssertEqualObjects([(QuestionListTableDataSource *)[nextViewController dataSource] topic], iPhoneTopic, @"The questions to display should come from the selected topic");
@@ -225,7 +227,7 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
 
 - (void)testDefaultStateOfViewControllerDoesNotReceiveQuestionSelectionNotification {
     [BrowseOverflowViewControllerTests swapInstanceMethodsForClass: [BrowseOverflowViewController class] selector: realUserDidSelectQuestion andSelector: testUserDidSelectQuestion];
-    [[NSNotificationCenter defaultCenter] postNotificationName: QuestionListDidSelectQuestionNotification object: question userInfo: nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName: QuestionListDidSelectQuestionNotification object: dataSource userInfo: @{QuestionListDidSelectQuestionNotificationKey : question}];
     XCTAssertNil(objc_getAssociatedObject(viewController, notificationKey), @"View controller shouldn't receive question selection notifications by default");
     [BrowseOverflowViewControllerTests swapInstanceMethodsForClass: [BrowseOverflowViewController class] selector: realUserDidSelectQuestion andSelector: testUserDidSelectQuestion];
 }
@@ -235,8 +237,8 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
     [viewController viewDidAppear: NO];
     [[NSNotificationCenter defaultCenter] 
      postNotificationName: QuestionListDidSelectQuestionNotification
-     object: nil
-     userInfo: nil];
+     object: dataSource
+     userInfo: @{QuestionListDidSelectQuestionNotificationKey : question}];
     XCTAssertNotNil(objc_getAssociatedObject(viewController, notificationKey), @"After -viewDidAppear: the view controller should handle question selection notifications");
     [BrowseOverflowViewControllerTests swapInstanceMethodsForClass: [BrowseOverflowViewController class] selector: realUserDidSelectQuestion andSelector: testUserDidSelectQuestion];
 }
@@ -247,14 +249,15 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
     [viewController viewWillDisappear: NO];
     [[NSNotificationCenter defaultCenter]
      postNotificationName: QuestionListDidSelectQuestionNotification
-     object: nil
-     userInfo: nil];
+     object: dataSource
+     userInfo: @{QuestionListDidSelectQuestionNotificationKey : question}];
     XCTAssertNil(objc_getAssociatedObject(viewController, notificationKey), @"After -viewWillDisappear: is called, the view controller should no longer respond to question selection notifications");
     [BrowseOverflowViewControllerTests swapInstanceMethodsForClass: [BrowseOverflowViewController class] selector: realUserDidSelectQuestion andSelector: testUserDidSelectQuestion];
 }
 
 - (void)testSelectingQuestionPushesNewViewController {
-    [viewController userDidSelectQuestionNotification: nil];
+    [viewController userDidSelectQuestionNotification: [NSNotification notificationWithName:QuestionListDidSelectQuestionNotification object:dataSource]];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
     UIViewController *currentTopVC = navController.topViewController;
     XCTAssertFalse([currentTopVC isEqual: viewController], @"New view controller should be pushed onto the stack");
     XCTAssertTrue([currentTopVC isKindOfClass: [BrowseOverflowViewController class]], @"New view controller should be a BrowseOverflowViewController");
@@ -262,8 +265,9 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
 
 - (void)testViewControllerPushedOnQuestionSelectionHasQuestionDetailDataSourceForSelectedQuestion {
     Question *sampleQuestion = [[Question alloc] init];
-    NSNotification *note = [NSNotification notificationWithName: QuestionListDidSelectQuestionNotification object: sampleQuestion];
+	NSNotification *note = [NSNotification notificationWithName: QuestionListDidSelectQuestionNotification object: dataSource userInfo: @{QuestionListDidSelectQuestionNotificationKey : sampleQuestion}];
     [viewController userDidSelectQuestionNotification: note];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
     BrowseOverflowViewController *nextVC = (BrowseOverflowViewController *)navController.topViewController;
     XCTAssertTrue([nextVC.dataSource isKindOfClass: [QuestionDetailDataSource class]], @"Selecting a question should show details of that question");
     XCTAssertEqualObjects([(QuestionDetailDataSource *)nextVC.dataSource question], sampleQuestion, @"Details should be shown for the selected question");
@@ -292,15 +296,20 @@ static const char *viewWillAppearKey = "BrowseOverflowViewControllerTestsViewWil
 }
 
 - (void)testViewWillAppearOnQuestionListInitiatesLoadingOfQuestions {
+	Topic *topic = [[Topic alloc] init];
+	QuestionListTableDataSource *tableDataSource = [[QuestionListTableDataSource alloc] init];
+	tableDataSource.topic = topic;
     viewController.objectConfiguration = testConfiguration;
-    viewController.dataSource = [[QuestionListTableDataSource alloc] init];
+    viewController.dataSource = tableDataSource;
     [viewController viewWillAppear: YES];
     XCTAssertTrue([manager didFetchQuestions], @"View controller should have arranged for question content to be downloaded");
 }
 
 - (void)testViewWillAppearOnQuestionDetailInitiatesLoadingOfAnswersAndBody {
+	QuestionDetailDataSource *detailDataSource = [[QuestionDetailDataSource alloc] init];
+	detailDataSource.question = question;
     viewController.objectConfiguration = testConfiguration;
-    viewController.dataSource = [[QuestionDetailDataSource alloc] init];
+    viewController.dataSource = detailDataSource;
     [viewController viewWillAppear: YES];
     XCTAssertTrue([manager didFetchQuestionBody], @"View controller should arrange for question detail to be loaded");
     XCTAssertTrue([manager didFetchAnswers], @"View controller should arrange for answers to be loaded");

@@ -56,7 +56,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[topic recentQuestions] count] > 0) {
-        NSNotification *notification = [NSNotification notificationWithName: QuestionListDidSelectQuestionNotification object: [topic.recentQuestions objectAtIndex: indexPath.row]];
+		NSNotification *notification = [NSNotification notificationWithName: QuestionListDidSelectQuestionNotification object: self userInfo: @{QuestionListDidSelectQuestionNotificationKey : [topic.recentQuestions objectAtIndex: indexPath.row]}];
         [notificationCenter postNotification: notification];
     }
 }
@@ -80,3 +80,4 @@
 @end
 
 NSString *QuestionListDidSelectQuestionNotification = @"QuestionListDidSelectQuestionNotification";
+NSString *QuestionListDidSelectQuestionNotificationKey = @"QuestionListDidSelectQuestionNotificationKey";

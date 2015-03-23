@@ -1,5 +1,5 @@
 //
-//  EmptyTableViewDataSource.m
+//  TopicTableDataSource.m
 //  BrowseOverflow
 //
 //  Created by Graham Lee on 27/07/2011.
@@ -47,10 +47,11 @@ NSString *topicCellReuseIdentifier = @"Topic";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSNotification *note = [NSNotification notificationWithName: TopicTableDidSelectTopicNotification object: [self topicForIndexPath: indexPath]];
+	NSNotification *note = [NSNotification notificationWithName: TopicTableDidSelectTopicNotification object: self userInfo: @{TopicTableDidSelectTopicNotificationKey : [self topicForIndexPath: indexPath]}];
     [[NSNotificationCenter defaultCenter] postNotification: note];
 }
 
 @end
 
 NSString *TopicTableDidSelectTopicNotification = @"TopicTableDidSelectTopicNotification";
+NSString *TopicTableDidSelectTopicNotificationKey = @"TopicTableDidSelectTopicNotificationKey";

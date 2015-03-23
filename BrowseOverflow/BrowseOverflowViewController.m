@@ -96,13 +96,17 @@
     self.manager.delegate = self;
     if ([self.dataSource isKindOfClass: [QuestionListTableDataSource class]]) {
         Topic *selectedTopic = [(QuestionListTableDataSource *)self.dataSource topic];
-        [self.manager fetchQuestionsOnTopic: selectedTopic];
+		if (selectedTopic) {
+			[self.manager fetchQuestionsOnTopic: selectedTopic];
+		}
         [(QuestionListTableDataSource *)self.dataSource setAvatarStore: [objectConfiguration avatarStore]];
     }
     else if ([self.dataSource isKindOfClass: [QuestionDetailDataSource class]]) {
         Question *selectedQuestion = [(QuestionDetailDataSource *)self.dataSource question];
-        [self.manager fetchBodyForQuestion: selectedQuestion];
-        [self.manager fetchAnswersForQuestion: selectedQuestion];
+		if (selectedQuestion) {
+			[self.manager fetchBodyForQuestion: selectedQuestion];
+			[self.manager fetchAnswersForQuestion: selectedQuestion];
+		}
         [(QuestionDetailDataSource *)self.dataSource setAvatarStore: [objectConfiguration avatarStore]];
     }
 }
@@ -110,23 +114,27 @@
 #pragma mark - Notification handling
 
 - (void)userDidSelectTopicNotification: (NSNotification *)note {
-    Topic * selectedTopic = (Topic *)[note object];
-    BrowseOverflowViewController *nextViewController = [[BrowseOverflowViewController alloc] init];
-    QuestionListTableDataSource *questionsDataSource = [[QuestionListTableDataSource alloc] init];
-    questionsDataSource.topic = selectedTopic;
-    nextViewController.dataSource = questionsDataSource;
-    nextViewController.objectConfiguration = self.objectConfiguration;
-    [[self navigationController] pushViewController: nextViewController animated: YES];
+	if ([note object] == self.dataSource) {
+		Topic * selectedTopic = (Topic *)[note userInfo][TopicTableDidSelectTopicNotificationKey];
+		BrowseOverflowViewController *nextViewController = [[BrowseOverflowViewController alloc] init];
+		QuestionListTableDataSource *questionsDataSource = [[QuestionListTableDataSource alloc] init];
+		questionsDataSource.topic = selectedTopic;
+		nextViewController.dataSource = questionsDataSource;
+		nextViewController.objectConfiguration = self.objectConfiguration;
+		[[self navigationController] pushViewController: nextViewController animated: YES];
+	}
 }
 
 - (void)userDidSelectQuestionNotification: (NSNotification *)note {
-    Question *selectedQuestion = (Question *)[note object];
-    BrowseOverflowViewController *nextViewController = [[BrowseOverflowViewController alloc] init];
-    QuestionDetailDataSource *detailDataSource = [[QuestionDetailDataSource alloc] init];
-    detailDataSource.question = selectedQuestion;
-    nextViewController.dataSource = detailDataSource;
-    nextViewController.objectConfiguration = self.objectConfiguration;
-    [[self navigationController] pushViewController: nextViewController animated: YES];
+	if ([note object] == self.dataSource) {
+		Question *selectedQuestion = (Question *)[note userInfo][QuestionListDidSelectQuestionNotificationKey];
+		BrowseOverflowViewController *nextViewController = [[BrowseOverflowViewController alloc] init];
+		QuestionDetailDataSource *detailDataSource = [[QuestionDetailDataSource alloc] init];
+		detailDataSource.question = selectedQuestion;
+		nextViewController.dataSource = detailDataSource;
+		nextViewController.objectConfiguration = self.objectConfiguration;
+		[[self navigationController] pushViewController: nextViewController animated: YES];
+	}
 }
 
 #pragma mark - StackOverflowManagerDelegate

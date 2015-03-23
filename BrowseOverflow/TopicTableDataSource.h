@@ -1,5 +1,5 @@
 //
-//  EmptyTableViewDataSource.h
+//  TopicTableDataSource.h
 //  BrowseOverflow
 //
 //  Created by Graham Lee on 27/07/2011.
@@ -15,3 +15,4 @@
 @end
 
 extern NSString *TopicTableDidSelectTopicNotification;
+extern NSString *TopicTableDidSelectTopicNotificationKey;

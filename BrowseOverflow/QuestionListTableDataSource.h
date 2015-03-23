@@ -27,3 +27,4 @@
 @end
 
 extern NSString *QuestionListDidSelectQuestionNotification;
+extern NSString *QuestionListDidSelectQuestionNotificationKey;

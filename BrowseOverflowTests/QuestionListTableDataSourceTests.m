@@ -122,7 +122,7 @@
 
 - (void)testSelectingPlaceholderDoesNotSendSelectionNotification {
     dataSource.notificationCenter = [NSNotificationCenter defaultCenter];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didReceiveNotification:) name: @"QuestionListDidSelectQuestionNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didReceiveNotification:) name: QuestionListDidSelectQuestionNotification object: nil];
     [dataSource tableView: nil didSelectRowAtIndexPath: firstCell];
     XCTAssertNil(receivedNotification, @"Shouldn't be notified of selecting the placeholder cell");
 }
@@ -130,10 +130,11 @@
 - (void)testSelectingQuestionSendsSelectionNotification {
     [iPhoneTopic addQuestion: question1];
     dataSource.notificationCenter = [NSNotificationCenter defaultCenter];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didReceiveNotification:) name: @"QuestionListDidSelectQuestionNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didReceiveNotification:) name: QuestionListDidSelectQuestionNotification object: nil];
     [dataSource tableView: nil didSelectRowAtIndexPath: firstCell];
-    XCTAssertEqualObjects([receivedNotification name], @"QuestionListDidSelectQuestionNotification", @"Question list should notify when a question is selected");
-    XCTAssertEqualObjects([receivedNotification object], question1, @"The selected question should be the object of the notification");
+    XCTAssertEqualObjects([receivedNotification name], QuestionListDidSelectQuestionNotification, @"Question list should notify when a question is selected");
+	XCTAssertEqualObjects([receivedNotification object], dataSource, @"The data source should be the object of the notification");
+    XCTAssertEqualObjects([receivedNotification userInfo][QuestionListDidSelectQuestionNotificationKey], question1, @"The notification should indicate which question was selected");
     [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
