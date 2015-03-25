@@ -9,10 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "StackOverflowCommunicator.h"
 
-@interface NonNetworkedStackOverflowCommunicator : StackOverflowCommunicator {
-    
-}
-
-@property (copy) NSData *receivedData;
+@interface NonNetworkedStackOverflowCommunicator : StackOverflowCommunicator
 
 @end

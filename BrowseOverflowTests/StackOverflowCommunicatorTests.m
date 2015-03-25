@@ -12,6 +12,10 @@
 #import "MockStackOverflowManager.h"
 #import "FakeURLResponse.h"
 
+@interface StackOverflowCommunicator ()
+@property (nonatomic) NSMutableData *receivedData;
+@end
+
 @implementation StackOverflowCommunicatorTests
 
 - (void)setUp {
@@ -20,7 +24,7 @@
     manager = [[MockStackOverflowManager alloc] init];
     nnCommunicator.delegate = manager;
     fourOhFourResponse = [[FakeURLResponse alloc] initWithStatusCode: 404];
-    receivedData = [@"Result" dataUsingEncoding: NSUTF8StringEncoding];
+    receivedData = [[@"Result" dataUsingEncoding: NSUTF8StringEncoding] mutableCopy];
 }
 
 - (void)tearDown {
@@ -55,7 +59,7 @@
 }
 
 - (void)testReceivingResponseDiscardsExistingData {
-    nnCommunicator.receivedData = [@"Hello" dataUsingEncoding: NSUTF8StringEncoding];
+    nnCommunicator.receivedData = [[@"Hello" dataUsingEncoding: NSUTF8StringEncoding] mutableCopy];
     [nnCommunicator searchForQuestionsWithTag: @"ios"];
     [nnCommunicator connection: nil didReceiveResponse: nil];
     XCTAssertEqual([nnCommunicator.receivedData length], (NSUInteger)0, @"Data should have been discarded");

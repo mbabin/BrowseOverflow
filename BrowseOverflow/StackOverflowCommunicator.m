@@ -10,8 +10,11 @@
 
 @interface StackOverflowCommunicator ()
 
-- (void)fetchContentAtURL: (NSURL *)url errorHandler: (void(^)(NSError *error))errorBlock successHandler: (void(^)(NSString *objectNotation)) successBlock;
-- (void)launchConnectionForRequest: (NSURLRequest *)request;
+@property (nonatomic) NSURL *fetchingURL;
+@property (nonatomic) NSURLConnection *fetchingConnection;
+@property (nonatomic) NSMutableData *receivedData;
+@property (nonatomic,copy) void (^errorHandler)(NSError *);
+@property (nonatomic,copy) void (^successHandler)(NSString *);
 
 @end
 
@@ -21,14 +24,14 @@
 
 - (void)launchConnectionForRequest: (NSURLRequest *)request  {
   [self cancelAndDiscardURLConnection];
-    fetchingConnection = [NSURLConnection connectionWithRequest: request delegate: self];
+    self.fetchingConnection = [NSURLConnection connectionWithRequest: request delegate: self];
 
 }
 - (void)fetchContentAtURL:(NSURL *)url errorHandler:(void (^)(NSError *))errorBlock successHandler:(void (^)(NSString *))successBlock {
-    fetchingURL = url;
-    errorHandler = [errorBlock copy];
-    successHandler = [successBlock copy];
-    NSURLRequest *request = [NSURLRequest requestWithURL: fetchingURL];
+    self.fetchingURL = url;
+    self.errorHandler = [errorBlock copy];
+    self.successHandler = [successBlock copy];
+    NSURLRequest *request = [NSURLRequest requestWithURL: self.fetchingURL];
     
     [self launchConnectionForRequest: request];
 
@@ -69,47 +72,47 @@
 }
 
 - (void)dealloc {
-    [fetchingConnection cancel];
+    [self.fetchingConnection cancel];
 }
 
 - (void)cancelAndDiscardURLConnection {
-    [fetchingConnection cancel];
-    fetchingConnection = nil;
+    [self.fetchingConnection cancel];
+    self.fetchingConnection = nil;
 }
 
 #pragma mark NSURLConnection Delegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    receivedData = nil;
+    self.receivedData = nil;
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
     if ([httpResponse statusCode] != 200) {
         NSError *error = [NSError errorWithDomain: StackOverflowCommunicatorErrorDomain code: [httpResponse statusCode] userInfo: nil];
-        errorHandler(error);
+        self.errorHandler(error);
         [self cancelAndDiscardURLConnection];
     }
     else {
-        receivedData = [[NSMutableData alloc] init];
+        self.receivedData = [[NSMutableData alloc] init];
     }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    receivedData = nil;
-    fetchingConnection = nil;
-    fetchingURL = nil;
-    errorHandler(error);
+    self.receivedData = nil;
+    self.fetchingConnection = nil;
+    self.fetchingURL = nil;
+    self.errorHandler(error);
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    fetchingConnection = nil;
-    fetchingURL = nil;
-    NSString *receivedText = [[NSString alloc] initWithData: receivedData
+    self.fetchingConnection = nil;
+    self.fetchingURL = nil;
+    NSString *receivedText = [[NSString alloc] initWithData: self.receivedData
                                                    encoding: NSUTF8StringEncoding];
-    receivedData = nil;
-    successHandler(receivedText);
+    self.receivedData = nil;
+    self.successHandler(receivedText);
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [receivedData appendData: data];
+    [self.receivedData appendData: data];
 }
 
 @end

@@ -9,16 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "StackOverflowCommunicatorDelegate.h"
 
-@interface StackOverflowCommunicator : NSObject <NSURLConnectionDataDelegate> {
-@protected
-    NSURL *fetchingURL;
-    NSURLConnection *fetchingConnection;
-    NSMutableData *receivedData;
-@private
-    id <StackOverflowCommunicatorDelegate> __weak delegate;
-    void (^errorHandler)(NSError *);
-    void (^successHandler)(NSString *);
-}
+@interface StackOverflowCommunicator : NSObject <NSURLConnectionDataDelegate> 
 
 @property (weak) id <StackOverflowCommunicatorDelegate> delegate;
 
