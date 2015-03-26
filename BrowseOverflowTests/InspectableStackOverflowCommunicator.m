@@ -11,7 +11,7 @@
 @interface StackOverflowCommunicator ()
 
 @property (nonatomic) NSURL *fetchingURL;
-@property (nonatomic) NSURLConnection *fetchingConnection;
+@property (nonatomic) NSURLSessionDataTask *fetchingDataTask;
 
 @end
 
@@ -21,8 +21,8 @@
     return self.fetchingURL;
 }
 
-- (NSURLConnection *)currentURLConnection {
-    return self.fetchingConnection;
+- (NSURLSessionDataTask *)currentTask {
+    return self.fetchingDataTask;
 }
 
 

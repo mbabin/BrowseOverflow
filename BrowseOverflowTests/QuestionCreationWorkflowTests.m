@@ -38,9 +38,9 @@
     questionToFetch = [[Question alloc] init];
     questionToFetch.questionID = 1234;
     questionArray = [NSArray arrayWithObject: questionToFetch];
-    communicator = [[MockStackOverflowCommunicator alloc] init];
+    communicator = [MockStackOverflowCommunicator communicatorWithDelegate:nil];
     mgr.communicator = communicator;
-    bodyCommunicator = [[MockStackOverflowCommunicator alloc] init];
+    bodyCommunicator = [MockStackOverflowCommunicator communicatorWithDelegate:nil];
     mgr.bodyCommunicator = bodyCommunicator;
 }
 

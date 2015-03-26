@@ -8,6 +8,9 @@
 
 #import "MockStackOverflowCommunicator.h"
 
+@interface StackOverflowCommunicator ()
+- (instancetype)initWithDelegate:(id <StackOverflowCommunicatorDelegate>)delegate NS_DESIGNATED_INITIALIZER;
+@end
 
 @implementation MockStackOverflowCommunicator
 {
@@ -16,8 +19,9 @@
     NSInteger questionID;
 }
 
-- (id)init {
-    if ((self = [super init])) {
+- (id)initWithDelegate:(id<StackOverflowCommunicatorDelegate>)delegate {
+	self = [super initWithDelegate:delegate];
+    if (self) {
         questionID = NSNotFound;
     }
     return self;
