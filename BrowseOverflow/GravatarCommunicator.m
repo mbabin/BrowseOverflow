@@ -8,37 +8,32 @@
 
 #import "GravatarCommunicator.h"
 
+@interface GravatarCommunicator ()
+@property (nonatomic) NSURLSession *session;
+@end
 
 @implementation GravatarCommunicator
 
-@synthesize url;
-@synthesize delegate;
-@synthesize receivedData;
-@synthesize connection;
-
+- (instancetype)init {
+	self = [super init];
+	if (self) {
+		_session = [NSURLSession sharedSession];
+	}
+	return self;
+}
 
 - (void)fetchDataForURL:(NSURL *)location {
     self.url = location;
-    NSURLRequest *request = [NSURLRequest requestWithURL: location];
-    self.connection = [NSURLConnection connectionWithRequest: request delegate: self];
-}
-
-#pragma mark NSURLConnection Delegate
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [delegate communicatorReceivedData: [receivedData copy] forURL: url];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    self.receivedData = [NSMutableData data];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [receivedData appendData: data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [delegate communicatorGotErrorForURL: url];
+	__weak typeof(self) weakSelf = self;
+	NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:location completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
+		typeof(self) strongSelf = weakSelf;
+		if (error) {
+			[strongSelf.delegate communicatorGotErrorForURL:strongSelf.url];
+		} else {
+			[strongSelf.delegate communicatorReceivedData:data forURL:strongSelf.url];
+		}
+	}];
+	[dataTask resume];
 }
 
 @end

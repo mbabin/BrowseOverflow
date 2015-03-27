@@ -9,14 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "GravatarCommunicatorDelegate.h"
 
-@interface GravatarCommunicator : NSObject <NSURLConnectionDataDelegate> {
-    
-}
-@property (retain) NSURL *url;
-@property (retain) NSMutableData *receivedData;
-@property (assign) id <GravatarCommunicatorDelegate> delegate;
-@property (assign) NSURLConnection *connection;
+@interface GravatarCommunicator : NSObject
 
-- (void)fetchDataForURL: (NSURL *)location;
+@property (nonatomic) NSURL *url;
+@property (weak) id <GravatarCommunicatorDelegate> delegate;
+
+- (void)fetchDataForURL:(NSURL *)location;
 
 @end
