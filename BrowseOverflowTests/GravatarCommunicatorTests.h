@@ -10,13 +10,6 @@
 #import <XCTest/XCTest.h>
 #import <UIKit/UIKit.h>
 
-@class GravatarCommunicator;
-@class FakeGravatarDelegate;
-
-@interface GravatarCommunicatorTests : XCTestCase {
-    GravatarCommunicator *communicator;
-    FakeGravatarDelegate *delegate;
-    NSData *fakeData;
-}
+@interface GravatarCommunicatorTests : XCTestCase
 
 @end

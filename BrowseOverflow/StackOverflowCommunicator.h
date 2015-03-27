@@ -9,24 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "StackOverflowCommunicatorDelegate.h"
 
-@interface StackOverflowCommunicator : NSObject <NSURLConnectionDataDelegate> {
-@protected
-    NSURL *fetchingURL;
-    NSURLConnection *fetchingConnection;
-    NSMutableData *receivedData;
-@private
-    id <StackOverflowCommunicatorDelegate> __weak delegate;
-    void (^errorHandler)(NSError *);
-    void (^successHandler)(NSString *);
-}
+@interface StackOverflowCommunicator : NSObject <NSURLSessionDataDelegate>
 
 @property (weak) id <StackOverflowCommunicatorDelegate> delegate;
+
++ (instancetype)communicatorWithDelegate:(id <StackOverflowCommunicatorDelegate>)delegate;
+- (id)init __attribute__((unavailable("Use +communicatorWithDelegate: instead")));
 
 - (void)searchForQuestionsWithTag: (NSString *)tag;
 - (void)downloadInformationForQuestionWithID: (NSInteger)identifier;
 - (void)downloadAnswersToQuestionWithID: (NSInteger)identifier;
 
-- (void)cancelAndDiscardURLConnection;
+- (void)cancelLastRequest;
 @end
 
 extern NSString *StackOverflowCommunicatorErrorDomain;

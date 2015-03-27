@@ -10,39 +10,60 @@
 
 @interface StackOverflowCommunicator ()
 
-- (void)fetchContentAtURL: (NSURL *)url errorHandler: (void(^)(NSError *error))errorBlock successHandler: (void(^)(NSString *objectNotation)) successBlock;
-- (void)launchConnectionForRequest: (NSURLRequest *)request;
+- (instancetype)initWithDelegate:(id <StackOverflowCommunicatorDelegate>)delegate NS_DESIGNATED_INITIALIZER;
+
+@property (nonatomic) NSURLSession *session;
+@property (nonatomic) NSURL *fetchingURL;
+@property (nonatomic) NSURLSessionDataTask *fetchingDataTask;
+@property (nonatomic) NSMutableData *receivedData;
+@property (nonatomic,copy) void (^errorHandler)(NSError *);
+@property (nonatomic,copy) void (^successHandler)(NSString *);
 
 @end
 
 @implementation StackOverflowCommunicator
 
-@synthesize delegate;
++ (instancetype)communicatorWithDelegate:(id <StackOverflowCommunicatorDelegate>)delegate {
+	StackOverflowCommunicator *communicator = [[self alloc] initWithDelegate:delegate];
+	communicator.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:communicator delegateQueue:[NSOperationQueue mainQueue]];
+	return communicator;
+}
+
+- (instancetype)initWithDelegate:(id <StackOverflowCommunicatorDelegate>)delegate {
+	self = [super init];
+	if (self) {
+		_delegate = delegate;
+	}
+	return self;
+}
+
+- (instancetype)init {
+	return [self initWithDelegate:nil];
+}
 
 - (void)launchConnectionForRequest: (NSURLRequest *)request  {
-  [self cancelAndDiscardURLConnection];
-    fetchingConnection = [NSURLConnection connectionWithRequest: request delegate: self];
-
+	[self cancelLastRequest];
+	self.fetchingDataTask = [self.session dataTaskWithRequest:request];
+	[self.fetchingDataTask resume];
 }
-- (void)fetchContentAtURL:(NSURL *)url errorHandler:(void (^)(NSError *))errorBlock successHandler:(void (^)(NSString *))successBlock {
-    fetchingURL = url;
-    errorHandler = [errorBlock copy];
-    successHandler = [successBlock copy];
-    NSURLRequest *request = [NSURLRequest requestWithURL: fetchingURL];
-    
-    [self launchConnectionForRequest: request];
 
+- (void)fetchContentAtURL:(NSURL *)url errorHandler:(void (^)(NSError *))errorBlock successHandler:(void (^)(NSString *))successBlock {
+    self.fetchingURL = url;
+    self.errorHandler = errorBlock;
+    self.successHandler = successBlock;
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.fetchingURL];
     
+    [self launchConnectionForRequest:request];
 }
 
 - (void)searchForQuestionsWithTag:(NSString *)tag {
 	[self fetchContentAtURL: [NSURL URLWithString:
 							  [NSString stringWithFormat: @"https://api.stackexchange.com/2.2/search?pagesize=20&order=desc&sort=activity&tagged=%@&site=stackoverflow", tag]]
                errorHandler: ^(NSError *error) {
-                   [delegate searchingForQuestionsFailedWithError: error];
+                   [self.delegate searchingForQuestionsFailedWithError: error];
                }
              successHandler: ^(NSString *objectNotation) {
-                 [delegate receivedQuestionsJSON: objectNotation];
+                 [self.delegate receivedQuestionsJSON: objectNotation];
              }];
 }
 
@@ -50,10 +71,10 @@
     [self fetchContentAtURL: [NSURL URLWithString:
 							  [NSString stringWithFormat:@"https://api.stackexchange.com/2.2/questions/%ld?order=desc&sort=activity&site=stackoverflow&filter=withbody", (long)identifier]]
                errorHandler: ^(NSError *error) {
-                   [delegate fetchingQuestionBodyFailedWithError: error];
+                   [self.delegate fetchingQuestionBodyFailedWithError: error];
                }
              successHandler: ^(NSString *objectNotation) {
-                 [delegate receivedQuestionBodyJSON: objectNotation];
+                 [self.delegate receivedQuestionBodyJSON: objectNotation];
              }];
 }
 
@@ -61,55 +82,63 @@
     [self fetchContentAtURL: [NSURL URLWithString:
 							  [NSString stringWithFormat:@"https://api.stackexchange.com/2.2/questions/%ld/answers?order=desc&sort=activity&site=stackoverflow&filter=withbody", (long)identifier]]
                errorHandler: ^(NSError *error) {
-                   [delegate fetchingAnswersFailedWithError: error];
+                   [self.delegate fetchingAnswersFailedWithError: error];
                }
              successHandler: ^(NSString *objectNotation) {
-                 [delegate receivedAnswerListJSON: objectNotation];
+                 [self.delegate receivedAnswerListJSON: objectNotation];
              }];
 }
 
 - (void)dealloc {
-    [fetchingConnection cancel];
+    [self.fetchingDataTask cancel];
 }
 
-- (void)cancelAndDiscardURLConnection {
-    [fetchingConnection cancel];
-    fetchingConnection = nil;
+- (void)cancelLastRequest {
+    [self.fetchingDataTask cancel];
+    self.fetchingDataTask = nil;
 }
 
-#pragma mark NSURLConnection Delegate
+#pragma mark NSURLSessionDataDelegate methods
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    receivedData = nil;
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-    if ([httpResponse statusCode] != 200) {
-        NSError *error = [NSError errorWithDomain: StackOverflowCommunicatorErrorDomain code: [httpResponse statusCode] userInfo: nil];
-        errorHandler(error);
-        [self cancelAndDiscardURLConnection];
-    }
-    else {
-        receivedData = [[NSMutableData alloc] init];
-    }
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
+	self.receivedData = nil;
+	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+	if ([httpResponse statusCode] != 200) {
+		NSError *error = [NSError errorWithDomain: StackOverflowCommunicatorErrorDomain code: [httpResponse statusCode] userInfo: nil];
+		self.errorHandler(error);
+		if (completionHandler) {
+			completionHandler(NSURLSessionResponseCancel);
+			self.fetchingDataTask = nil;
+		} else {
+			[self cancelLastRequest];
+		}
+	}
+	else {
+		self.receivedData = [[NSMutableData alloc] init];
+		if (completionHandler) {
+			completionHandler(NSURLSessionResponseAllow);
+		}
+	}
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    receivedData = nil;
-    fetchingConnection = nil;
-    fetchingURL = nil;
-    errorHandler(error);
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+	[self.receivedData appendData:data];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    fetchingConnection = nil;
-    fetchingURL = nil;
-    NSString *receivedText = [[NSString alloc] initWithData: receivedData
-                                                   encoding: NSUTF8StringEncoding];
-    receivedData = nil;
-    successHandler(receivedText);
-}
+#pragma mark NSURLSessionTaskDelegate methods
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [receivedData appendData: data];
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
+	self.fetchingDataTask = nil;
+	self.fetchingURL = nil;
+	if (error) {
+		self.receivedData = nil;
+		self.errorHandler(error);
+	} else {
+		NSString *receivedText = [[NSString alloc] initWithData:self.receivedData
+													   encoding:NSUTF8StringEncoding];
+		self.receivedData = nil;
+		self.successHandler(receivedText);
+	}
 }
 
 @end

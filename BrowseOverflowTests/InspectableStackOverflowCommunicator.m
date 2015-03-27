@@ -8,15 +8,21 @@
 
 #import "InspectableStackOverflowCommunicator.h"
 
+@interface StackOverflowCommunicator ()
+
+@property (nonatomic) NSURL *fetchingURL;
+@property (nonatomic) NSURLSessionDataTask *fetchingDataTask;
+
+@end
 
 @implementation InspectableStackOverflowCommunicator
 
 - (NSURL *)URLToFetch {
-    return fetchingURL;
+    return self.fetchingURL;
 }
 
-- (NSURLConnection *)currentURLConnection {
-    return fetchingConnection;
+- (NSURLSessionDataTask *)currentTask {
+    return self.fetchingDataTask;
 }
 
 

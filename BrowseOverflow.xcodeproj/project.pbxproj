@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		368AFA2C1ABF63A9000AE30C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 368AFA2B1ABF63A8000AE30C /* Default-568h@2x.png */; };
 		368AFA2D1ABFB91C000AE30C /* TopicTableDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 981A28B313E024F300FE8AD0 /* TopicTableDataSource.m */; };
+		36A9DAE61AC4C1C300ADF67B /* FakeURLSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 36A9DAE51AC4C1C300ADF67B /* FakeURLSession.m */; };
 		9803B9D3134328FC00FEF72D /* QuestionBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9803B9D2134328FC00FEF72D /* QuestionBuilder.m */; };
 		9803B9D4134328FC00FEF72D /* QuestionBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9803B9D2134328FC00FEF72D /* QuestionBuilder.m */; };
 		9803B9D7134330E000FEF72D /* FakeQuestionBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9803B9D6134330E000FEF72D /* FakeQuestionBuilder.m */; };
@@ -116,6 +117,8 @@
 
 /* Begin PBXFileReference section */
 		368AFA2B1ABF63A8000AE30C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		36A9DAE41AC4C1C300ADF67B /* FakeURLSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeURLSession.h; sourceTree = "<group>"; };
+		36A9DAE51AC4C1C300ADF67B /* FakeURLSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeURLSession.m; sourceTree = "<group>"; };
 		9803B9D1134328FC00FEF72D /* QuestionBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuestionBuilder.h; sourceTree = "<group>"; };
 		9803B9D2134328FC00FEF72D /* QuestionBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuestionBuilder.m; sourceTree = "<group>"; };
 		9803B9D5134330E000FEF72D /* FakeQuestionBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeQuestionBuilder.h; sourceTree = "<group>"; };
@@ -293,6 +296,8 @@
 				98BAC3E6138E577000B36163 /* FakeGravatarDelegate.m */,
 				98E3AEB3138FD55B00E8407B /* FakeNotificationCenter.h */,
 				98E3AEB4138FD55B00E8407B /* FakeNotificationCenter.m */,
+				36A9DAE41AC4C1C300ADF67B /* FakeURLSession.h */,
+				36A9DAE51AC4C1C300ADF67B /* FakeURLSession.m */,
 				985264B113FEB72200A92A7D /* ReloadDataWatcher.h */,
 				985264B213FEB72200A92A7D /* ReloadDataWatcher.m */,
 				98BF4DE81471ABAF008A2D66 /* TestObjectConfiguration.h */,
@@ -627,6 +632,7 @@
 				98B5849413168D6E003EA838 /* Person.m in Sources */,
 				9818AB8213181B6E00479006 /* AnswerTests.m in Sources */,
 				9818AB8713181CA700479006 /* Answer.m in Sources */,
+				36A9DAE61AC4C1C300ADF67B /* FakeURLSession.m in Sources */,
 				9868E920132E32F800AEF519 /* QuestionCreationWorkflowTests.m in Sources */,
 				9868E924132E578600AEF519 /* StackOverflowManager.m in Sources */,
 				9868E929132E63C300AEF519 /* MockStackOverflowManagerDelegate.m in Sources */,

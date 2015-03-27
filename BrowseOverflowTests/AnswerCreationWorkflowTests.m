@@ -17,7 +17,7 @@
 
 - (void)setUp {
     manager = [[StackOverflowManager alloc] init];
-    communicator = [[MockStackOverflowCommunicator alloc] init];
+    communicator = [MockStackOverflowCommunicator communicatorWithDelegate:nil];
     manager.communicator = communicator;
     delegate = [[MockStackOverflowManagerDelegate alloc] init];
     manager.delegate = delegate;

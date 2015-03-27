@@ -9,10 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "StackOverflowCommunicator.h"
 
-@interface InspectableStackOverflowCommunicator : StackOverflowCommunicator {
-}
+@interface InspectableStackOverflowCommunicator : StackOverflowCommunicator
 
 - (NSURL *)URLToFetch;
-- (NSURLConnection *)currentURLConnection;
+- (NSURLSessionDataTask *)currentTask;
 
 @end
