@@ -9,10 +9,5 @@
 #import <XCTest/XCTest.h>
 #import <UIKit/UIKit.h>
 
-@class Topic;
-
-@interface TopicTests : XCTestCase {
-    Topic *topic;
-}
-
+@interface TopicTests : XCTestCase
 @end

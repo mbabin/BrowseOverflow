@@ -11,35 +11,37 @@
 
 @interface Topic ()
 
+@property (nonatomic) NSSet *questions;
+
 - (NSArray *)sortQuestionsLatestFirst: (NSArray *)questionList;
 
 @end
 
 @implementation Topic
-@synthesize name;
-@synthesize tag;
 
 - (id)initWithName:(NSString *)newName tag: (NSString *)newTag {
-    if ((self = [super init])) {
-        name = [newName copy];
-        tag = [newTag copy];
-        questions = [[NSArray alloc] init];
+	self = [super init];
+    if (self) {
+        _name = [newName copy];
+        _tag = [newTag copy];
+        _questions = [[NSSet alloc] init];
     }
     return self;
 }
 
 
 - (void)addQuestion: (Question *)question {
-    NSArray *newQuestions = [questions arrayByAddingObject: question];
+    NSSet *newQuestions = [self.questions setByAddingObject:question];
+	NSArray *latestQuestions = [newQuestions allObjects];
     if ([newQuestions count] > 20) {
-        newQuestions = [self sortQuestionsLatestFirst: newQuestions];
-        newQuestions = [newQuestions subarrayWithRange: NSMakeRange(0, 20)];
+        latestQuestions = [self sortQuestionsLatestFirst:latestQuestions];
+        latestQuestions = [latestQuestions subarrayWithRange: NSMakeRange(0, 20)];
     }
-    questions = newQuestions;
+    self.questions = [NSSet setWithArray:latestQuestions];
 }
 
 - (NSArray *)recentQuestions {
-    return [self sortQuestionsLatestFirst: questions];
+	return [self sortQuestionsLatestFirst:[self.questions allObjects]];
 }
 
 - (NSArray *)sortQuestionsLatestFirst: (NSArray *)questionList {

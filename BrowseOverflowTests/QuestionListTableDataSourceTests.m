@@ -39,9 +39,11 @@
     firstCell = [NSIndexPath indexPathForRow: 0 inSection: 0];
     question1 = [[Question alloc] init];
     question1.title = @"Question One";
+	question1.questionID = 1;
     question1.score = 2;
     question2 = [[Question alloc] init];
     question2.title = @"Question Two";
+	question2.questionID = 2;
     
     asker1 = [[Person alloc] initWithName: @"Graham Lee" avatarLocation: @"http://www.gravatar.com/avatar/563290c0c1b776a315b36e863b388a0c"];
     question1.asker = asker1;

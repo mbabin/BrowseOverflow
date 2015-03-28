@@ -14,9 +14,7 @@
 /**
  * Represents a question asked on the Stack Overflow website.
  */
-@interface Question : NSObject {
-    NSMutableSet *answerSet;
-}
+@interface Question : NSObject
 
 /**
  * The date on which this question was asked.

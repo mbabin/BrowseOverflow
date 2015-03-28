@@ -9,29 +9,37 @@
 #import "Question.h"
 #import "Person.h"
 
-@implementation Question
+@interface Question ()
+@property (nonatomic) NSMutableSet *answerSet;
+@end
 
-@synthesize date;
-@synthesize title;
-@synthesize body;
-@synthesize score;
-@synthesize questionID;
-@synthesize asker;
+@implementation Question
 
 - (id)init {
     if ((self = [super init])) {
-        answerSet = [[NSMutableSet alloc] init];
+        _answerSet = [[NSMutableSet alloc] init];
     }
     return self;
 }
 
 - (void)addAnswer:(Answer *)answer {
-    [answerSet addObject: answer];
+    [self.answerSet addObject:answer];
 }
 
 - (NSArray *)answers {
-    return [[answerSet allObjects] sortedArrayUsingSelector: @selector(compare:)];
+    return [[self.answerSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
+- (BOOL)isEqual:(id)other {
+	if ([other isKindOfClass:[self class]]) {
+		return (self.questionID == [other questionID]);
+	} else {
+		return [super isEqual:other];
+	}
+}
+
+- (NSUInteger)hash {
+    return self.questionID;
+}
 
 @end
